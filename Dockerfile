@@ -21,7 +21,7 @@ ENV MAVEN_HOME /opt/maven
 ENV PATH $MAVEN_HOME/bin:$PATH
 # Set the working directory
 WORKDIR /app
-COPY ..
+COPY . /app
 
 # Build the application
 RUN ./mvnw package -DskipTests
