@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:latest
+    container_name: petclnic-db
+    environment:
+      MYSQL_USER: petclinic
+      MYSQL_PASSWORD: petclinicpassword
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: petclinic
+    ports:
+      - "3306:3306"
+    volumes:
+      - db-volume:/var/lib/mysql
+    healthcheck:
+      test: ['CMD-SHELL', 'mysqladmin ping -h 127.0.0.1 --password="rootpassword" --silent']
+      interval: 3s
+      retries: 5
+      start_period: 30s
+
+  app:
+    build: .
+    container_name: spring-petclinic
+    ports:
+      - "6060:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/petclinic
+      SPRING_DATASOURCE_USERNAME: petclinic
+      SPRING_DATASOURCE_PASSWORD: petclinicpassword
+      SPRING_PROFILES_ACTIVE: mysql
+
+volumes:
+  db-volume:
