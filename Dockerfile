@@ -19,17 +19,9 @@ RUN apt-get update && \
 # Set environment variables for Maven
 ENV MAVEN_HOME /opt/maven
 ENV PATH $MAVEN_HOME/bin:$PATH
-
-# Copy the pom.xml and maven wrapper files
-COPY pom.xml ./
-COPY mvnw ./
-COPY .mvn .mvn
-
-# Download the dependencies
-RUN ./mvnw dependency:go-offline
-
-# Copy the application source code
-COPY src ./src
+# Set the working directory
+WORKDIR /app
+COPY ..
 
 # Build the application
 RUN ./mvnw package -DskipTests
