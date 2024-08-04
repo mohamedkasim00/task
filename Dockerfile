@@ -1,23 +1,32 @@
-# Build stage
-FROM maven:3.8.5-openjdk-17-slim AS build
-# Set the working directory
+# Use Eclipse Temurin JRE 17 as the base image
+FROM docker.io/library/eclipse-temurin:17-jre@sha256:34cc39fcd17383dfbe9b1e1ff29efb89c770913698be71db32e7e4be25bce2e0 AS base
+
+# Create a working directory
 WORKDIR /app
+
+# Build stage
+FROM base AS build
+
+# Set the working directory in the build stage
+WORKDIR /app
+
+# Copy the application source code to the container
 COPY . /app
 
-# Build the application
+# Give execution permissions to the mvnw script
+RUN chmod +x ./mvnw
+
+# Package the application without running tests
 RUN ./mvnw package -DskipTests
 
-# Run stage
-FROM eclipse-temurin:17-jre
+# Final stage
+FROM base AS final
 
-# Set the working directory
+# Set the working directory in the final stage
 WORKDIR /app
 
-# Copy the built JAR from the build stage
-COPY --from=build /app/target/*.jar /app/app.jar
+# Copy the built application from the build stage
+COPY --from=build /app/target/*.jar ./app.jar
 
-# Expose the port the application runs on
-EXPOSE 8080
-
-# Define the entry point for the container
-CMD ["java", "-jar", "/app/app.jar"]
+# Command to run the application
+CMD ["java", "-jar", "./app.jar"]
