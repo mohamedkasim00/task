@@ -6,7 +6,7 @@ WORKDIR /app
 
 # Copy the application source code to the container
 COPY . /app
-
+RUN ./mvnw clean install
 # Give execution permissions to the mvnw script
 RUN chmod +x ./mvnw
 
