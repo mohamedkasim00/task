@@ -20,7 +20,7 @@ services:
       start_period: 30s
 
   spring-petclinic:
-    image: mohamedkasem22/spring-petclinic:latest
+    image: mohamedkasem22/springpetclinic:latest
     ports:
       - "7080:8080"
     depends_on:
