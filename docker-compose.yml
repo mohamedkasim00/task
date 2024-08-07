@@ -20,6 +20,8 @@ services:
       start_period: 30s
 
   app:
+      build:
+      context: .
     image: mohamedkasem22/spring-petclinic:latest
     ports:
       - "6060:8080"
