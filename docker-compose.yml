@@ -22,7 +22,7 @@ services:
   spring-petclinic:
     image: mohamedkasem22/spring-petclinic:latest
     ports:
-      - "6060:8080"
+      - "7080:8080"
     depends_on:
       db:
         condition: service_healthy
